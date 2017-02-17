@@ -14,7 +14,7 @@ const InfoDisplay = ({ info }) => {
   };
 
   return (
-    <P className="InfoDisplay" >{info}</P>
+    <P className="InfoDisplay">{info}</P>
   );
 };
 

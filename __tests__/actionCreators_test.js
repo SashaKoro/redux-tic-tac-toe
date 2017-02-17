@@ -12,3 +12,14 @@ describe('changeInfoDisplay test', () => {
     expect(actions.changeInfoDisplay(newInfo)).toEqual(expectedAction);
   });
 });
+
+describe ('showIntroScreen test', () => {
+  it('sends out correct action type and payload', () => {
+    const newBoolean = false;
+    const expectedAction = {
+      type: types.INTRO_SCREEN,
+      payload: false,
+    };
+    expect(actions.showIntroScreen(newBoolean)).toEqual(expectedAction);
+  });
+});

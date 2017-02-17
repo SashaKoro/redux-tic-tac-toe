@@ -10,6 +10,7 @@ import rowLogic from './functions/rowLogic';
 import forkLogic from './functions/forkLogic';
 import {
   changeInfoDisplay,
+  showIntroScreen,
 } from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
@@ -20,7 +21,7 @@ class TicTacToe extends Component {
 
     this.state = {
       // infoDisplay: 'Your Turn!',
-      showIntroScreen: true,
+      // showIntroScreen: true,
       playerScore: 0,
       compScore: 0,
       gameBoard: ['', '', '', '', '', '', '', '', ''],
@@ -52,7 +53,8 @@ class TicTacToe extends Component {
   }
 
   PlayerHasChosen (choice, computerToken) {
-    this.setState({ showIntroScreen: false });
+    this.props.showIntroScreen(false);
+    // this.setState({ showIntroScreen: false });
     this.setState({ playerChose: choice });
     this.setState({ computerChose: computerToken });
   }
@@ -208,7 +210,7 @@ class TicTacToe extends Component {
 
   render () {
     console.log(this.props);
-    if (this.state.showIntroScreen) {
+    if (this.props.introScreen) {
       return (
         <IntroScreen
           className="IntroScreen" chooseThis={this.PlayerHasChosen}
@@ -237,17 +239,20 @@ class TicTacToe extends Component {
 TicTacToe.propTypes = {
   infoDisplay: PropTypes.string.isRequired,
   changeInfoDisplay: PropTypes.func.isRequired,
+  introScreen: PropTypes.bool.isRequired,
+  showIntroScreen: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
 
-function mapStateToProps ({ infoDisplay }) {
-  return { infoDisplay };
+function mapStateToProps ({ infoDisplay, introScreen }) {
+  return { infoDisplay, introScreen };
 }
 
 function mapDispatchToProps (dispatch) {
   return bindActionCreators({
     changeInfoDisplay,
+    showIntroScreen,
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

@@ -59,11 +59,12 @@ const Or = styled.p`
 
 const IntroScreen = ({ chooseThis }) => {
   IntroScreen.propTypes = {
-    chooseThis: PropTypes.func,
+    chooseThis: PropTypes.func.isRequired,
   };
 
   const X = () => chooseThis('X', 'O');
   const O = () => chooseThis('O', 'X');
+
   return (
     <Div className="IntroScreen container">
       <P className="text-center">Tic Tac Toe</P>

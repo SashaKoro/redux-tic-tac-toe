@@ -22,7 +22,6 @@ class TicTacToe extends Component {
     this.state = {
       // infoDisplay: 'Your Turn!',
       // showIntroScreen: true,
-      playerScore: 0,
       compScore: 0,
       gameBoard: ['', '', '', '', '', '', '', '', ''],
       playerChose: '',
@@ -138,15 +137,15 @@ class TicTacToe extends Component {
     Colors[winIdxTwo].backgroundColor = winningColor;
     Colors[winIdxThree].backgroundColor = winningColor;
     this.setState({ boxColors: Colors });
-    if (winningToken === this.state.playerChose) {
-      this.props.changeInfoDisplay(show.YOU_WON);
-      // this.setState({ infoDisplay: 'You won!' });
-      this.setState({ playerScore: this.state.playerScore + 1 });
-    } else {
-      this.props.changeInfoDisplay(show.YOU_LOST);
-      // this.setState({ infoDisplay: 'You lost...' });
-      this.setState({ compScore: this.state.compScore + 1 });
-    }
+    // if (winningToken === this.state.playerChose) {
+    //   this.props.changeInfoDisplay(show.YOU_WON);
+    //   // this.setState({ infoDisplay: 'You won!' });
+    //   this.setState({ playerScore: this.state.playerScore + 1 });
+    // } else {
+    this.props.changeInfoDisplay(show.YOU_LOST);
+    // this.setState({ infoDisplay: 'You lost...' });
+    this.setState({ compScore: this.state.compScore + 1 });
+    // }
     setTimeout(this.restartGame, 3000);
   }
 
@@ -228,7 +227,6 @@ class TicTacToe extends Component {
           boxColors={this.state.boxColors}
         />
         <ScoreBoard
-          playerScore={this.state.playerScore}
           compScore={this.state.compScore}
         />
       </div>

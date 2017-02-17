@@ -24,9 +24,8 @@ const Output = styled.output`
   display: inline-block;
 `;
 
-const ScoreBoard = ({ playerScore, compScore }) => {
+const ScoreBoard = ({ compScore }) => {
   ScoreBoard.propTypes = {
-    playerScore: PropTypes.number.isRequired,
     compScore: PropTypes.number.isRequired,
   };
 
@@ -34,7 +33,7 @@ const ScoreBoard = ({ playerScore, compScore }) => {
     <Div className="ScoreBoard">
       <InnerDiv>
         <P>Player:</P>
-        <Output className="playerOutput">{playerScore}</Output>
+        <Output className="playerOutput">0</Output>
         <P>Computer:</P>
         <Output className="compOutput">{compScore}</Output>
       </InnerDiv>

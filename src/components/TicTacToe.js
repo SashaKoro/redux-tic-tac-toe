@@ -1,18 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import IntroScreen from './IntroScreen';
 import GameBoard from './GameBoard';
 import ScoreBoard from './ScoreBoard';
 import InfoDisplay from './InfoDisplay';
 import rowLogic from './functions/rowLogic';
 import forkLogic from './functions/forkLogic';
-import _ from 'lodash';
+import {
+  changeInfoDisplay,
+} from '../actions/index';
+import * as show from '../constants/infoDisplayConstants';
+
 
 class TicTacToe extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
-      infoDisplay: 'Your Turn!',
+      // infoDisplay: 'Your Turn!',
       showIntroScreen: true,
       playerScore: 0,
       compScore: 0,
@@ -88,19 +95,22 @@ class TicTacToe extends Component {
   }
 
   tieGame () {
-    this.setState({ infoDisplay: 'Tie game!' });
+    this.props.changeInfoDisplay(show.TIE_GAME);
+    // this.setState({ infoDisplay: 'Tie game!' });
     setTimeout(this.restartGame, 3000);
   }
 
   whosMove () {
     this.setState({ turnNumber: this.state.turnNumber + 1 });
     if (this.state.playersTurn) {
-      this.setState({ infoDisplay: 'Thinking...' });
+      this.props.changeInfoDisplay(show.THINKING);
+      // this.setState({ infoDisplay: 'Thinking...' });
       this.setState({ playersTurn: false });
       setTimeout(this.ComputerMove, 1000);
     } else {
       this.setState({ playersTurn: true });
-      this.setState({ infoDisplay: 'Your Turn!' });
+      this.props.changeInfoDisplay(show.YOUR_TURN);
+      // this.setState({ infoDisplay: 'Your Turn!' });
     }
   }
 
@@ -108,12 +118,14 @@ class TicTacToe extends Component {
     if (this.state.playerStarts) {
       this.setState({ playerStarts: false });
       this.setState({ playersTurn: false });
-      this.setState({ infoDisplay: 'Thinking...' });
+      this.props.changeInfoDisplay(show.THINKING);
+      // this.setState({ infoDisplay: 'Thinking...' });
       setTimeout(this.ComputerMove, 1000);
     } else {
       this.setState({ playerStarts: true });
       this.setState({ playersTurn: true });
-      this.setState({ infoDisplay: 'Your Turn!' });
+      this.props.changeInfoDisplay(show.YOUR_TURN);
+      // this.setState({ infoDisplay: 'Your Turn!' });
     }
   }
 
@@ -125,10 +137,12 @@ class TicTacToe extends Component {
     Colors[winIdxThree].backgroundColor = winningColor;
     this.setState({ boxColors: Colors });
     if (winningToken === this.state.playerChose) {
-      this.setState({ infoDisplay: 'You won!' });
+      this.props.changeInfoDisplay(show.YOU_WON);
+      // this.setState({ infoDisplay: 'You won!' });
       this.setState({ playerScore: this.state.playerScore + 1 });
     } else {
-      this.setState({ infoDisplay: 'You lost...' });
+      this.props.changeInfoDisplay(show.YOU_LOST);
+      // this.setState({ infoDisplay: 'You lost...' });
       this.setState({ compScore: this.state.compScore + 1 });
     }
     setTimeout(this.restartGame, 3000);
@@ -193,6 +207,7 @@ class TicTacToe extends Component {
   }
 
   render () {
+    console.log(this.props);
     if (this.state.showIntroScreen) {
       return (
         <IntroScreen
@@ -202,7 +217,7 @@ class TicTacToe extends Component {
     } else return (
       <div className="TicTacToe">
         <InfoDisplay
-         info={this.state.infoDisplay}
+         info={this.props.infoDisplay}
         />
         <GameBoard
           playersTurn={this.state.playersTurn}
@@ -219,4 +234,20 @@ class TicTacToe extends Component {
   }
 }
 
-export default TicTacToe;
+TicTacToe.propTypes = {
+  infoDisplay: PropTypes.string.isRequired,
+  changeInfoDisplay: PropTypes.func.isRequired,
+};
+
+/* eslint-disable func-style */
+
+function mapStateToProps ({ infoDisplay }) {
+  return { infoDisplay };
+}
+
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({
+    changeInfoDisplay,
+  }, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

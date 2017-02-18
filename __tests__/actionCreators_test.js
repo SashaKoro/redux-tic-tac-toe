@@ -30,3 +30,14 @@ describe ('addToComputerScore test', () => {
     expect(actions.addToComputerScore()).toEqual(expectedAction);
   });
 });
+
+describe ('changeWhosTurn test', () => {
+  it('sends out correct action type and payload', () => {
+    const newBoolean = false;
+    const expectedAction = {
+      type: types.TURN_CHANGE,
+      payload: false,
+    };
+    expect(actions.changeWhosTurn(newBoolean)).toEqual(expectedAction);
+  });
+});

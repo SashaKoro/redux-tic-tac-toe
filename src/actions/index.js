@@ -13,3 +13,8 @@ export const showIntroScreen = (newBoolean) => ({
 export const addToComputerScore = () => ({
   type: types.COMP_SCORE,
 });
+
+export const changeWhosTurn = (newBoolean) => ({
+  type: types.TURN_CHANGE,
+  payload: newBoolean,
+});

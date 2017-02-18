@@ -12,6 +12,7 @@ import {
   changeInfoDisplay,
   showIntroScreen,
   addToComputerScore,
+  changeWhosTurn,
 } from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
@@ -27,7 +28,7 @@ class TicTacToe extends Component {
       gameBoard: ['', '', '', '', '', '', '', '', ''],
       playerChose: '',
       computerChose: '',
-      playersTurn: true,
+      // playersTurn: true,
       playerStarts: true,
       turnNumber: 1,
       boxColors: [
@@ -54,7 +55,6 @@ class TicTacToe extends Component {
 
   PlayerHasChosen (choice, computerToken) {
     this.props.showIntroScreen(false);
-    // this.setState({ showIntroScreen: false });
     this.setState({ playerChose: choice });
     this.setState({ computerChose: computerToken });
   }
@@ -98,36 +98,31 @@ class TicTacToe extends Component {
 
   tieGame () {
     this.props.changeInfoDisplay(show.TIE_GAME);
-    // this.setState({ infoDisplay: 'Tie game!' });
     setTimeout(this.restartGame, 3000);
   }
 
   whosMove () {
     this.setState({ turnNumber: this.state.turnNumber + 1 });
-    if (this.state.playersTurn) {
+    if (this.props.playersTurn) {
       this.props.changeInfoDisplay(show.THINKING);
-      // this.setState({ infoDisplay: 'Thinking...' });
-      this.setState({ playersTurn: false });
+      this.props.changeWhosTurn(false);
       setTimeout(this.ComputerMove, 1000);
     } else {
-      this.setState({ playersTurn: true });
+      this.props.changeWhosTurn(true);
       this.props.changeInfoDisplay(show.YOUR_TURN);
-      // this.setState({ infoDisplay: 'Your Turn!' });
     }
   }
 
   whoStarts () {
     if (this.state.playerStarts) {
+      this.props.changeWhosTurn(false);
       this.setState({ playerStarts: false });
-      this.setState({ playersTurn: false });
       this.props.changeInfoDisplay(show.THINKING);
-      // this.setState({ infoDisplay: 'Thinking...' });
       setTimeout(this.ComputerMove, 1000);
     } else {
       this.setState({ playerStarts: true });
-      this.setState({ playersTurn: true });
+      this.props.changeWhosTurn(true);
       this.props.changeInfoDisplay(show.YOUR_TURN);
-      // this.setState({ infoDisplay: 'Your Turn!' });
     }
   }
 
@@ -138,16 +133,8 @@ class TicTacToe extends Component {
     Colors[winIdxTwo].backgroundColor = winningColor;
     Colors[winIdxThree].backgroundColor = winningColor;
     this.setState({ boxColors: Colors });
-    // if (winningToken === this.state.playerChose) {
-    //   this.props.changeInfoDisplay(show.YOU_WON);
-    //   // this.setState({ infoDisplay: 'You won!' });
-    //   this.setState({ playerScore: this.state.playerScore + 1 });
-    // } else {
     this.props.changeInfoDisplay(show.YOU_LOST);
-    // this.setState({ infoDisplay: 'You lost...' });
     this.props.addToComputerScore();
-    // this.setState({ compScore: this.state.compScore + 1 });
-    // }
     setTimeout(this.restartGame, 3000);
   }
 
@@ -223,7 +210,7 @@ class TicTacToe extends Component {
          info={this.props.infoDisplay}
         />
         <GameBoard
-          playersTurn={this.state.playersTurn}
+          playersTurn={this.props.playersTurn}
           nextMove={this.NewPlayerMove}
           squareContains={this.state.gameBoard}
           boxColors={this.state.boxColors}
@@ -243,12 +230,14 @@ TicTacToe.propTypes = {
   showIntroScreen: PropTypes.func.isRequired,
   computerScore: PropTypes.number.isRequired,
   addToComputerScore: PropTypes.func.isRequired,
+  playersTurn: PropTypes.bool.isRequired,
+  changeWhosTurn: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
 
-function mapStateToProps ({ infoDisplay, introScreen, computerScore }) {
-  return { infoDisplay, introScreen, computerScore };
+function mapStateToProps ({ infoDisplay, introScreen, computerScore, playersTurn }) {
+  return { infoDisplay, introScreen, computerScore, playersTurn };
 }
 
 function mapDispatchToProps (dispatch) {
@@ -256,6 +245,7 @@ function mapDispatchToProps (dispatch) {
     changeInfoDisplay,
     showIntroScreen,
     addToComputerScore,
+    changeWhosTurn,
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

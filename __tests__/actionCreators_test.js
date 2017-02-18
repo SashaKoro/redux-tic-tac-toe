@@ -23,3 +23,10 @@ describe ('showIntroScreen test', () => {
     expect(actions.showIntroScreen(newBoolean)).toEqual(expectedAction);
   });
 });
+
+describe ('addToComputerScore test', () => {
+  it('sends out correct action type', () => {
+    const expectedAction = { type: types.COMP_SCORE };
+    expect(actions.addToComputerScore()).toEqual(expectedAction);
+  });
+});

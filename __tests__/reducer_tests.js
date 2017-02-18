@@ -3,6 +3,7 @@
 import * as types from '../src/actions/actionTypes';
 import infoDisplay from '../src/reducers/infoDisplay';
 import introScreen from '../src/reducers/introScreen';
+import computerScore from '../src/reducers/computerScore';
 import * as show from '../src/constants/infoDisplayConstants';
 
 describe('infoDisplay Reducer', () => {
@@ -26,5 +27,16 @@ describe('introScreen Reducer', () => {
       type: types.INTRO_SCREEN,
       payload: false,
     })).toEqual(false);
+  });
+});
+
+describe('computerScore reducer', () => {
+  it('returns the initial state on default', () => {
+    expect(computerScore(undefined, {})).toEqual(0);
+  });
+  it('handles COMP_SCORE action type and returns new state', () => {
+    expect(computerScore(undefined, {
+      type: types.COMP_SCORE,
+    })).toEqual(1);
   });
 });

@@ -9,3 +9,7 @@ export const showIntroScreen = (newBoolean) => ({
   type: types.INTRO_SCREEN,
   payload: newBoolean,
 });
+
+export const addToComputerScore = () => ({
+  type: types.COMP_SCORE,
+});

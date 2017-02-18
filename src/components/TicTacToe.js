@@ -11,6 +11,7 @@ import forkLogic from './functions/forkLogic';
 import {
   changeInfoDisplay,
   showIntroScreen,
+  addToComputerScore,
 } from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
@@ -22,7 +23,7 @@ class TicTacToe extends Component {
     this.state = {
       // infoDisplay: 'Your Turn!',
       // showIntroScreen: true,
-      compScore: 0,
+      // compScore: 0,
       gameBoard: ['', '', '', '', '', '', '', '', ''],
       playerChose: '',
       computerChose: '',
@@ -144,7 +145,8 @@ class TicTacToe extends Component {
     // } else {
     this.props.changeInfoDisplay(show.YOU_LOST);
     // this.setState({ infoDisplay: 'You lost...' });
-    this.setState({ compScore: this.state.compScore + 1 });
+    this.props.addToComputerScore();
+    // this.setState({ compScore: this.state.compScore + 1 });
     // }
     setTimeout(this.restartGame, 3000);
   }
@@ -227,7 +229,7 @@ class TicTacToe extends Component {
           boxColors={this.state.boxColors}
         />
         <ScoreBoard
-          compScore={this.state.compScore}
+          compScore={this.props.computerScore}
         />
       </div>
     );
@@ -239,18 +241,21 @@ TicTacToe.propTypes = {
   changeInfoDisplay: PropTypes.func.isRequired,
   introScreen: PropTypes.bool.isRequired,
   showIntroScreen: PropTypes.func.isRequired,
+  computerScore: PropTypes.number.isRequired,
+  addToComputerScore: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
 
-function mapStateToProps ({ infoDisplay, introScreen }) {
-  return { infoDisplay, introScreen };
+function mapStateToProps ({ infoDisplay, introScreen, computerScore }) {
+  return { infoDisplay, introScreen, computerScore };
 }
 
 function mapDispatchToProps (dispatch) {
   return bindActionCreators({
     changeInfoDisplay,
     showIntroScreen,
+    addToComputerScore,
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

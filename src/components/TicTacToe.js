@@ -13,6 +13,7 @@ import {
   showIntroScreen,
   addToComputerScore,
   changeWhosTurn,
+  updateTurnNumber,
 } from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
@@ -30,7 +31,7 @@ class TicTacToe extends Component {
       computerChose: '',
       // playersTurn: true,
       playerStarts: true,
-      turnNumber: 1,
+      // turnNumber: 1,
       boxColors: [
         { backgroundColor: '#D2D2D2' },
         { backgroundColor: '#D2D2D2' },
@@ -102,7 +103,7 @@ class TicTacToe extends Component {
   }
 
   whosMove () {
-    this.setState({ turnNumber: this.state.turnNumber + 1 });
+    this.props.updateTurnNumber(this.props.turnNumber + 1);
     if (this.props.playersTurn) {
       this.props.changeInfoDisplay(show.THINKING);
       this.props.changeWhosTurn(false);
@@ -146,12 +147,12 @@ class TicTacToe extends Component {
     });
     this.setState({ boxColors: freshBoard });
     this.setState({ gameBoard: ['', '', '', '', '', '', '', '', ''] });
-    this.setState({ turnNumber: 1 });
+    this.props.updateTurnNumber(1);
     this.whoStarts();
   }
 
   ComputerMove () {
-    let turnNumber = this.state.turnNumber;
+    let turnNumber = this.props.turnNumber;
     let gameBoard = this.state.gameBoard.slice();
     let playerToken = this.state.playerChose;
     let token = this.state.computerChose;
@@ -232,12 +233,14 @@ TicTacToe.propTypes = {
   addToComputerScore: PropTypes.func.isRequired,
   playersTurn: PropTypes.bool.isRequired,
   changeWhosTurn: PropTypes.func.isRequired,
+  turnNumber: PropTypes.number.isRequired,
+  updateTurnNumber: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
 
-function mapStateToProps ({ infoDisplay, introScreen, computerScore, playersTurn }) {
-  return { infoDisplay, introScreen, computerScore, playersTurn };
+function mapStateToProps ({ infoDisplay, introScreen, computerScore, playersTurn, turnNumber }) {
+  return { infoDisplay, introScreen, computerScore, playersTurn, turnNumber };
 }
 
 function mapDispatchToProps (dispatch) {
@@ -246,6 +249,7 @@ function mapDispatchToProps (dispatch) {
     showIntroScreen,
     addToComputerScore,
     changeWhosTurn,
+    updateTurnNumber,
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

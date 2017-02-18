@@ -5,6 +5,7 @@ import infoDisplay from '../src/reducers/infoDisplay';
 import introScreen from '../src/reducers/introScreen';
 import computerScore from '../src/reducers/computerScore';
 import playersTurn from '../src/reducers/playersTurn';
+import turnNumber from '../src/reducers/turnNumber';
 import * as show from '../src/constants/infoDisplayConstants';
 
 describe('infoDisplay Reducer', () => {
@@ -42,7 +43,7 @@ describe('computerScore Reducer', () => {
   });
 });
 
-describe('playersTurn Reducers', () => {
+describe('playersTurn Reducer', () => {
   it('returns the initial state on default', () => {
     expect(playersTurn(undefined, {})).toEqual(true);
   });
@@ -51,5 +52,17 @@ describe('playersTurn Reducers', () => {
       type: types.TURN_CHANGE,
       payload: false,
     })).toEqual(false);
+  });
+});
+
+describe('turnNumber Reducer', () => {
+  it('returns the intitial state on default', () => {
+    expect(turnNumber(undefined, {})).toEqual(1);
+  });
+  it('handles TURN_NUMBER action type and returns new state', () => {
+    expect(turnNumber(undefined, {
+      type: types.TURN_NUMBER,
+      payload: 7,
+    })).toEqual(7);
   });
 });

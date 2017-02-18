@@ -18,3 +18,8 @@ export const changeWhosTurn = (newBoolean) => ({
   type: types.TURN_CHANGE,
   payload: newBoolean,
 });
+
+export const updateTurnNumber = (newTurn) => ({
+  type: types.TURN_NUMBER,
+  payload: newTurn,
+});

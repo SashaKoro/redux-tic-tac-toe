@@ -13,7 +13,7 @@ describe('changeInfoDisplay test', () => {
   });
 });
 
-describe ('showIntroScreen test', () => {
+describe('showIntroScreen test', () => {
   it('sends out correct action type and payload', () => {
     const newBoolean = false;
     const expectedAction = {
@@ -24,14 +24,14 @@ describe ('showIntroScreen test', () => {
   });
 });
 
-describe ('addToComputerScore test', () => {
+describe('addToComputerScore test', () => {
   it('sends out correct action type', () => {
     const expectedAction = { type: types.COMP_SCORE };
     expect(actions.addToComputerScore()).toEqual(expectedAction);
   });
 });
 
-describe ('changeWhosTurn test', () => {
+describe('changeWhosTurn test', () => {
   it('sends out correct action type and payload', () => {
     const newBoolean = false;
     const expectedAction = {
@@ -39,5 +39,16 @@ describe ('changeWhosTurn test', () => {
       payload: false,
     };
     expect(actions.changeWhosTurn(newBoolean)).toEqual(expectedAction);
+  });
+});
+
+describe('updateTurnNumber test', () => {
+  it('sends out correct action type and payload', () => {
+    const newTurn = 5;
+    const expectedAction = {
+      type: types.TURN_NUMBER,
+      payload: 5,
+    };
+    expect(actions.updateTurnNumber(newTurn)).toEqual(expectedAction);
   });
 });

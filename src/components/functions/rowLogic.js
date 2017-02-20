@@ -1,3 +1,5 @@
+import { indexer } from './indexer';
+
 export const winningLines = [
   [0,1,2],
   [0,3,6],
@@ -10,27 +12,21 @@ export const winningLines = [
 ];
 
 const rowLogic = (gameBoard, testToken, token) => {
-  let putItHere;
-  let tokenIndexes = [];
-
-  for (let i = 0; i < gameBoard.length; i += 1) {
-    if (gameBoard[i] === testToken) {
-      tokenIndexes.push(i);
-    }
-  }
+  let tokenIndexes = indexer(gameBoard, testToken);
+  let board = gameBoard.slice();
 
   for (let j = 0; j < winningLines.length; j += 1) {
     let found = tokenIndexes.filter((eachIndex) => winningLines[j].includes(eachIndex));
     if (found.length === 2) {
-      putItHere = winningLines[j].filter((each) => !found.includes(each));
-      if (gameBoard[putItHere] === '') {
-        gameBoard[putItHere] = token;
+      let putItHere = winningLines[j].filter((each) => !found.includes(each));
+      if (board[putItHere] === '') {
+        board[putItHere] = token;
         break;
       }
     }
   }
 
-  return gameBoard;
+  return board;
 };
 
 

@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import { indexer } from './indexer';
 
-const forkLogic = (gameBoard, playerToken, token) => {
+const forkLogic = (gameBoard, testToken, token) => {
   const forkLines = [
     [1, 3],
     [1, 5],
@@ -17,21 +18,16 @@ const forkLogic = (gameBoard, playerToken, token) => {
   ];
 
   const counterMoves = [2, 0, 6, 8, 2, 6, 0, 2, 0, 8, 6, 8];
+  let tokenIndexes = indexer(gameBoard, testToken);
+  let board = gameBoard.slice();
 
-  let playerTokenIndexes = [];
-
-  for (let i = 0; i < gameBoard.length; i += 1) {
-    if (gameBoard[i] === playerToken) {
-      playerTokenIndexes.push(i);
+  forkLines.forEach((line, index) => {
+    if (_.isEqual(line, tokenIndexes)) {
+      board[counterMoves[index]] = token;
     }
-  }
+  });
 
-  for (let j = 0; j < forkLines.length; j += 1) {
-    if (_.isEqual(forkLines[j], playerTokenIndexes)) {
-      gameBoard[counterMoves[j]] = token;
-    }
-  }
-  return gameBoard;
+  return board;
 };
 
 export default forkLogic;

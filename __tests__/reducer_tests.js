@@ -9,7 +9,9 @@ import turnNumber from '../src/reducers/turnNumber';
 import playerStarts from '../src/reducers/playerStarts';
 import tokens from '../src/reducers/tokens';
 import boxColors, { colorState } from '../src/reducers/boxColors';
+import gameBoard, { cleanBoard } from '../src/reducers/gameBoard';
 import { colorTestStub } from '../src/constants/colorTestStub';
+import { gameBoardTest } from '../src/constants/gameBoardTestStub';
 import * as show from '../src/constants/infoDisplayConstants';
 
 describe('infoDisplay Reducer', () => {
@@ -109,5 +111,17 @@ describe('boxColors Reducer', () => {
       type: types.COLOR_CHANGE,
       payload: colorTestStub,
     })).toEqual(colorTestStub);
+  });
+});
+
+describe('gameBoard Reducer', () => {
+  it('returns the initial state on default', () => {
+    expect(gameBoard(undefined, {})).toEqual(cleanBoard);
+  });
+  it('handles the UPDATE_BOARD action type and returns a new state', () => {
+    expect(gameBoard(undefined, {
+      type: types.UPDATE_BOARD,
+      payload: gameBoardTest,
+    })).toEqual(gameBoardTest);
   });
 });

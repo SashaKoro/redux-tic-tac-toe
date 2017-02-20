@@ -8,6 +8,7 @@ import ScoreBoard from './ScoreBoard';
 import InfoDisplay from './InfoDisplay';
 import rowLogic from './functions/rowLogic';
 import forkLogic from './functions/forkLogic';
+import { cleanBoard } from '../reducers/gameBoard';
 import {
   changeInfoDisplay,
   showIntroScreen,
@@ -17,6 +18,7 @@ import {
   whoStartsNext,
   setTokens,
   changeBoxColors,
+  updateTheBoard,
 } from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
@@ -24,29 +26,6 @@ import * as show from '../constants/infoDisplayConstants';
 class TicTacToe extends Component {
   constructor (props) {
     super(props);
-
-    this.state = {
-      // infoDisplay: 'Your Turn!',
-      // showIntroScreen: true,
-      // compScore: 0,
-      gameBoard: ['', '', '', '', '', '', '', '', ''],
-      // playerChose: '',
-      // computerChose: '',
-      // playersTurn: true,
-      // playerStarts: true,
-      // turnNumber: 1,
-      // boxColors: [
-      //   { backgroundColor: '#D2D2D2' },
-      //   { backgroundColor: '#D2D2D2' },
-      //   { backgroundColor: '#D2D2D2' },
-      //   { backgroundColor: '#D2D2D2' },
-      //   { backgroundColor: '#D2D2D2' },
-      //   { backgroundColor: '#D2D2D2' },
-      //   { backgroundColor: '#D2D2D2' },
-      //   { backgroundColor: '#D2D2D2' },
-      //   { backgroundColor: '#D2D2D2' },
-      // ],
-    };
 
     this.PlayerHasChosen = this.PlayerHasChosen.bind(this);
     this.NewPlayerMove = this.NewPlayerMove.bind(this);
@@ -64,9 +43,9 @@ class TicTacToe extends Component {
 
   NewPlayerMove (position) {
     let placeToken = this.props.tokens.playerToken;
-    let currentBoard = this.state.gameBoard.slice();
+    let currentBoard = this.props.gameBoard.slice();
     currentBoard[position] = placeToken;
-    this.setState({ gameBoard: currentBoard });
+    this.props.updateTheBoard(currentBoard);
     this.checkIfWinner(currentBoard);
   }
 
@@ -136,7 +115,6 @@ class TicTacToe extends Component {
     Colors[winIdxTwo].backgroundColor = winningColor;
     Colors[winIdxThree].backgroundColor = winningColor;
     this.props.changeBoxColors(Colors);
-    // this.setState({ boxColors: Colors });
     this.props.changeInfoDisplay(show.YOU_LOST);
     this.props.addToComputerScore();
     setTimeout(this.restartGame, 3000);
@@ -149,15 +127,14 @@ class TicTacToe extends Component {
       return eachColor;
     });
     this.props.changeBoxColors(freshBoard);
-    // this.setState({ boxColors: freshBoard });
-    this.setState({ gameBoard: ['', '', '', '', '', '', '', '', ''] });
+    this.props.updateTheBoard(cleanBoard);
     this.props.updateTurnNumber(1);
     this.whoStarts();
   }
 
   ComputerMove () {
     let turnNumber = this.props.turnNumber;
-    let gameBoard = this.state.gameBoard.slice();
+    let gameBoard = this.props.gameBoard.slice();
     let playerToken = this.props.tokens.playerToken;
     let token = this.props.tokens.computerToken;
 
@@ -197,7 +174,7 @@ class TicTacToe extends Component {
         gameBoard[i] = token;
       }
     }
-    this.setState({ gameBoard });
+    this.props.updateTheBoard(gameBoard);
     this.checkIfWinner(gameBoard);
   }
 
@@ -217,7 +194,7 @@ class TicTacToe extends Component {
         <GameBoard
           playersTurn={this.props.playersTurn}
           nextMove={this.NewPlayerMove}
-          squareContains={this.state.gameBoard}
+          squareContains={this.props.gameBoard}
           boxColors={this.props.boxColors}
         />
         <ScoreBoard
@@ -250,6 +227,8 @@ TicTacToe.propTypes = {
     backgroundColor: PropTypes.string.isRequired,
   }).isRequired).isRequired,
   changeBoxColors: PropTypes.func.isRequired,
+  gameBoard: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  updateTheBoard: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
@@ -263,6 +242,7 @@ function mapStateToProps ({
   playerStarts,
   tokens,
   boxColors,
+  gameBoard,
 }) {
   return {
     infoDisplay,
@@ -273,6 +253,7 @@ function mapStateToProps ({
     playerStarts,
     tokens,
     boxColors,
+    gameBoard,
   };
 }
 
@@ -286,6 +267,7 @@ function mapDispatchToProps (dispatch) {
     whoStartsNext,
     setTokens,
     changeBoxColors,
+    updateTheBoard,
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

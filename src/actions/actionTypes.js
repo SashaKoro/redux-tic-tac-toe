@@ -6,3 +6,4 @@ export const TURN_NUMBER = 'TURN_NUMBER';
 export const FIRST_MOVE = 'FIRST_MOVE';
 export const TOKEN_PICK = 'TOKEN_PICK';
 export const COLOR_CHANGE = 'COLOR_CHANGE';
+export const UPDATE_BOARD = 'UPDATE_BOARD';

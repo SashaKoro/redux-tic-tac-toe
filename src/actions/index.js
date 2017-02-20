@@ -37,3 +37,8 @@ export const changeBoxColors = (newColors)  => ({
   type: types.COLOR_CHANGE,
   payload: newColors,
 });
+
+export const updateTheBoard = (newBoard) => ({
+  type: types.UPDATE_BOARD,
+  payload: newBoard,
+});

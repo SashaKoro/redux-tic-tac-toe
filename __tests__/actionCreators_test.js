@@ -2,6 +2,7 @@
 import * as types from '../src/actions/actionTypes';
 import * as actions from '../src/actions/index';
 import { colorTestStub } from '../src/constants/colorTestStub';
+import { gameBoardTest } from '../src/constants/gameBoardTestStub';
 
 describe('changeInfoDisplay test', () => {
   it('sends out correct action type and payload', () => {
@@ -81,5 +82,15 @@ describe('changeBoxColors test', () => {
       payload: colorTestStub,
     };
     expect(actions.changeBoxColors(colorTestStub)).toEqual(expectedAction);
+  });
+});
+
+describe('updateTheBoard test', () => {
+  it('sends out correct action type', () => {
+    const expectedAction = {
+      type: types.UPDATE_BOARD,
+      payload: gameBoardTest,
+    };
+    expect(actions.updateTheBoard(gameBoardTest)).toEqual(expectedAction);
   });
 });

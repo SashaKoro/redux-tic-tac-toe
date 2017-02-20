@@ -18,7 +18,7 @@ describe('showIntroScreen test', () => {
     const newBoolean = false;
     const expectedAction = {
       type: types.INTRO_SCREEN,
-      payload: false,
+      payload: newBoolean,
     };
     expect(actions.showIntroScreen(newBoolean)).toEqual(expectedAction);
   });
@@ -36,7 +36,7 @@ describe('changeWhosTurn test', () => {
     const newBoolean = false;
     const expectedAction = {
       type: types.TURN_CHANGE,
-      payload: false,
+      payload: newBoolean,
     };
     expect(actions.changeWhosTurn(newBoolean)).toEqual(expectedAction);
   });
@@ -47,7 +47,7 @@ describe('updateTurnNumber test', () => {
     const newTurn = 5;
     const expectedAction = {
       type: types.TURN_NUMBER,
-      payload: 5,
+      payload: newTurn,
     };
     expect(actions.updateTurnNumber(newTurn)).toEqual(expectedAction);
   });
@@ -59,5 +59,16 @@ describe('whoStartsNext text', () => {
       type: types.FIRST_MOVE,
     };
     expect(actions.whoStartsNext()).toEqual(expectedAction);
+  });
+});
+
+describe('setTokens test', () => {
+  it('sends out correct action type', () => {
+    const tokenArgs = ['X', 'O'];
+    const expectedAction = {
+      type: types.TOKEN_PICK,
+      payload: tokenArgs,
+    };
+    expect(actions.setTokens(...tokenArgs)).toEqual(expectedAction);
   });
 });

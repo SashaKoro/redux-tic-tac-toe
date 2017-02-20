@@ -7,6 +7,7 @@ import computerScore from '../src/reducers/computerScore';
 import playersTurn from '../src/reducers/playersTurn';
 import turnNumber from '../src/reducers/turnNumber';
 import playerStarts from '../src/reducers/playerStarts';
+import tokens from '../src/reducers/tokens';
 import * as show from '../src/constants/infoDisplayConstants';
 
 describe('infoDisplay Reducer', () => {
@@ -68,7 +69,7 @@ describe('turnNumber Reducer', () => {
   });
 });
 
-describe('playerStarts reducer', () => {
+describe('playerStarts Reducer', () => {
   it('returns the initial state on default', () => {
     expect(playerStarts(undefined, {})).toEqual(true);
   });
@@ -76,5 +77,23 @@ describe('playerStarts reducer', () => {
     expect(playerStarts(true, {
       type: types.FIRST_MOVE,
     })).toEqual(false);
+  });
+});
+
+describe('tokens Reducer', () => {
+  it('returns the initial state on default', () => {
+    expect(tokens(undefined, {})).toEqual({
+      playerToken: '',
+      computerToken: '',
+    });
+  });
+  it('handles the TOKEN_PICK action type and returns new state', () => {
+    expect(tokens(undefined, {
+      type: types.TOKEN_PICK,
+      payload: ['O', 'X'],
+    })).toEqual({
+      playerToken: 'O',
+      computerToken: 'X',
+    });
   });
 });

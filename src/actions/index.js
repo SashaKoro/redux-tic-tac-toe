@@ -27,3 +27,8 @@ export const updateTurnNumber = (newTurn) => ({
 export const whoStartsNext = () => ({
   type: types.FIRST_MOVE,
 });
+
+export const setTokens = (playerToken, compToken) => ({
+  type: types.TOKEN_PICK,
+  payload: [playerToken, compToken],
+});

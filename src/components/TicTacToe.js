@@ -15,6 +15,7 @@ import {
   changeWhosTurn,
   updateTurnNumber,
   whoStartsNext,
+  setTokens,
 } from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
@@ -28,8 +29,8 @@ class TicTacToe extends Component {
       // showIntroScreen: true,
       // compScore: 0,
       gameBoard: ['', '', '', '', '', '', '', '', ''],
-      playerChose: '',
-      computerChose: '',
+      // playerChose: '',
+      // computerChose: '',
       // playersTurn: true,
       // playerStarts: true,
       // turnNumber: 1,
@@ -55,14 +56,15 @@ class TicTacToe extends Component {
     this.whoStarts = this.whoStarts.bind(this);
   }
 
-  PlayerHasChosen (choice, computerToken) {
+  PlayerHasChosen (playerToken, computerToken) {
     this.props.showIntroScreen(false);
-    this.setState({ playerChose: choice });
-    this.setState({ computerChose: computerToken });
+    this.props.setTokens(playerToken, computerToken);
+    // this.setState({ playerChose: choice });
+    // this.setState({ computerChose: computerToken });
   }
 
   NewPlayerMove (position) {
-    let placeToken = this.state.playerChose;
+    let placeToken = this.props.tokens.playerToken;
     let currentBoard = this.state.gameBoard.slice();
     currentBoard[position] = placeToken;
     this.setState({ gameBoard: currentBoard });
@@ -119,12 +121,10 @@ class TicTacToe extends Component {
     if (this.props.playerStarts) {
       this.props.changeWhosTurn(false);
       this.props.whoStartsNext();
-      // this.setState({ playerStarts: false });
       this.props.changeInfoDisplay(show.THINKING);
       setTimeout(this.ComputerMove, 1000);
     } else {
       this.props.whoStartsNext();
-      // this.setState({ playerStarts: true });
       this.props.changeWhosTurn(true);
       this.props.changeInfoDisplay(show.YOUR_TURN);
     }
@@ -157,8 +157,8 @@ class TicTacToe extends Component {
   ComputerMove () {
     let turnNumber = this.props.turnNumber;
     let gameBoard = this.state.gameBoard.slice();
-    let playerToken = this.state.playerChose;
-    let token = this.state.computerChose;
+    let playerToken = this.props.tokens.playerToken;
+    let token = this.props.tokens.computerToken;
 
     if (turnNumber === 1) gameBoard[0] = token;
 
@@ -240,6 +240,11 @@ TicTacToe.propTypes = {
   updateTurnNumber: PropTypes.func.isRequired,
   playerStarts: PropTypes.bool.isRequired,
   whoStartsNext: PropTypes.func.isRequired,
+  tokens: PropTypes.shape({
+    playerToken: PropTypes.string.isRequired,
+    computerToken: PropTypes.string.isRequired,
+  }).isRequired,
+  setTokens: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
@@ -250,7 +255,8 @@ function mapStateToProps ({
   computerScore,
   playersTurn,
   turnNumber,
-  playerStarts ,
+  playerStarts,
+  tokens,
 }) {
   return {
     infoDisplay,
@@ -259,6 +265,7 @@ function mapStateToProps ({
     playersTurn,
     turnNumber,
     playerStarts,
+    tokens,
   };
 }
 
@@ -270,6 +277,7 @@ function mapDispatchToProps (dispatch) {
     changeWhosTurn,
     updateTurnNumber,
     whoStartsNext,
+    setTokens,
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

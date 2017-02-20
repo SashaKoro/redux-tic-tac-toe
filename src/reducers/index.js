@@ -5,6 +5,7 @@ import computerScore from './computerScore';
 import playersTurn from './playersTurn';
 import turnNumber from './turnNumber';
 import playerStarts from './playerStarts';
+import tokens from './tokens';
 
 const rootReducer = combineReducers({
   infoDisplay,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   playersTurn,
   turnNumber,
   playerStarts,
+  tokens,
 });
 
 export default rootReducer;

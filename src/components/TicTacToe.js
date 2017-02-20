@@ -6,20 +6,10 @@ import IntroScreen from './IntroScreen';
 import GameBoard from './GameBoard';
 import ScoreBoard from './ScoreBoard';
 import InfoDisplay from './InfoDisplay';
-import rowLogic from './functions/rowLogic';
+import rowLogic, { winningLines } from './functions/rowLogic';
 import forkLogic from './functions/forkLogic';
 import { cleanBoard } from '../reducers/gameBoard';
-import {
-  changeInfoDisplay,
-  showIntroScreen,
-  addToComputerScore,
-  changeWhosTurn,
-  updateTurnNumber,
-  whoStartsNext,
-  setTokens,
-  changeBoxColors,
-  updateTheBoard,
-} from '../actions/index';
+import * as actions from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
 
@@ -27,55 +17,40 @@ class TicTacToe extends Component {
   constructor (props) {
     super(props);
 
-    this.PlayerHasChosen = this.PlayerHasChosen.bind(this);
-    this.NewPlayerMove = this.NewPlayerMove.bind(this);
+    this.playerHasChosen = this.playerHasChosen.bind(this);
+    this.newPlayerMove = this.newPlayerMove.bind(this);
     this.crownWinner = this.crownWinner.bind(this);
     this.restartGame = this.restartGame.bind(this);
-    this.ComputerMove = this.ComputerMove.bind(this);
+    this.computerMove = this.computerMove.bind(this);
     this.whosMove = this.whosMove.bind(this);
     this.whoStarts = this.whoStarts.bind(this);
   }
 
-  PlayerHasChosen (playerToken, computerToken) {
+  playerHasChosen (playerToken, computerToken) {
     this.props.showIntroScreen(false);
     this.props.setTokens(playerToken, computerToken);
   }
 
-  NewPlayerMove (position) {
-    let placeToken = this.props.tokens.playerToken;
+  newPlayerMove (position) {
     let currentBoard = this.props.gameBoard.slice();
-    currentBoard[position] = placeToken;
+    currentBoard[position] = this.props.tokens.playerToken;
     this.props.updateTheBoard(currentBoard);
     this.checkIfWinner(currentBoard);
   }
 
   checkIfWinner (Board) {
-    let gameOver = false;
-    const winningLines = [
-      [0,1,2],
-      [0,3,6],
-      [0,4,8],
-      [1,4,7],
-      [2,4,6],
-      [2,5,8],
-      [3,4,5],
-      [6,7,8],
-    ];
     winningLines.forEach((winLine) => {
       let [winIdxOne, winIdxTwo, winIdxThree] = winLine;
-      if (Board[winIdxOne] + Board[winIdxTwo] + Board[winIdxThree] === 'XXX') {
-        gameOver = true;
-        this.crownWinner('X', winIdxOne, winIdxTwo, winIdxThree);
-      } else if (Board[winIdxOne] + Board[winIdxTwo] + Board[winIdxThree] === 'OOO') {
-        gameOver = true;
-        this.crownWinner('O', winIdxOne, winIdxTwo, winIdxThree);
+      if (Board[winIdxOne] + Board[winIdxTwo] + Board[winIdxThree] === 'XXX' ||
+          Board[winIdxOne] + Board[winIdxTwo] + Board[winIdxThree] === 'OOO') {
+        return this.crownWinner(...winLine);
       }
     });
     if (Board.join('').length === 9) {
-      gameOver = true;
-      this.tieGame();
+      return this.tieGame();
     }
-    if (!gameOver) this.whosMove();
+
+    return this.whosMove();
   }
 
   tieGame () {
@@ -88,7 +63,7 @@ class TicTacToe extends Component {
     if (this.props.playersTurn) {
       this.props.changeInfoDisplay(show.THINKING);
       this.props.changeWhosTurn(false);
-      setTimeout(this.ComputerMove, 1000);
+      setTimeout(this.computerMove, 1000);
     } else {
       this.props.changeWhosTurn(true);
       this.props.changeInfoDisplay(show.YOUR_TURN);
@@ -100,7 +75,7 @@ class TicTacToe extends Component {
       this.props.changeWhosTurn(false);
       this.props.whoStartsNext();
       this.props.changeInfoDisplay(show.THINKING);
-      setTimeout(this.ComputerMove, 1000);
+      setTimeout(this.computerMove, 1000);
     } else {
       this.props.whoStartsNext();
       this.props.changeWhosTurn(true);
@@ -108,7 +83,7 @@ class TicTacToe extends Component {
     }
   }
 
-  crownWinner (winningToken, winIdxOne, winIdxTwo, winIdxThree) {
+  crownWinner (winIdxOne, winIdxTwo, winIdxThree) {
     let winningColor = '#EFD469';
     let Colors = JSON.parse(JSON.stringify(this.props.boxColors));
     Colors[winIdxOne].backgroundColor = winningColor;
@@ -132,22 +107,25 @@ class TicTacToe extends Component {
     this.whoStarts();
   }
 
-  ComputerMove () {
+  computerMove () {
     let turnNumber = this.props.turnNumber;
     let gameBoard = this.props.gameBoard.slice();
     let playerToken = this.props.tokens.playerToken;
     let token = this.props.tokens.computerToken;
 
-    if (turnNumber === 1) gameBoard[0] = token;
-
+    if (turnNumber === 1) {
+      gameBoard[0] = token;
+    }
     if (turnNumber === 2) {
-      if (gameBoard[4] === '') gameBoard[4] = token;
-      else gameBoard[2] = token;
+      if (gameBoard[4] === '') {
+        gameBoard[4] = token;
+      } else gameBoard[2] = token;
     }
 
     if (turnNumber === 3) {
-      if (gameBoard[4] === '') gameBoard[4] = token;
-      else gameBoard[8] = token;
+      if (gameBoard[4] === '') {
+        gameBoard[4] = token;
+      } else gameBoard[8] = token;
     }
 
     if (turnNumber === 4) {
@@ -174,6 +152,7 @@ class TicTacToe extends Component {
         gameBoard[i] = token;
       }
     }
+
     this.props.updateTheBoard(gameBoard);
     this.checkIfWinner(gameBoard);
   }
@@ -183,7 +162,7 @@ class TicTacToe extends Component {
     if (this.props.introScreen) {
       return (
         <IntroScreen
-          className="IntroScreen" chooseThis={this.PlayerHasChosen}
+          className="IntroScreen" chooseThis={this.playerHasChosen}
         />
       );
     } else return (
@@ -193,7 +172,7 @@ class TicTacToe extends Component {
         />
         <GameBoard
           playersTurn={this.props.playersTurn}
-          nextMove={this.NewPlayerMove}
+          nextMove={this.newPlayerMove}
           squareContains={this.props.gameBoard}
           boxColors={this.props.boxColors}
         />
@@ -206,29 +185,35 @@ class TicTacToe extends Component {
 }
 
 TicTacToe.propTypes = {
-  infoDisplay: PropTypes.string.isRequired,
+
+  /* action creators */
+
   changeInfoDisplay: PropTypes.func.isRequired,
-  introScreen: PropTypes.bool.isRequired,
   showIntroScreen: PropTypes.func.isRequired,
-  computerScore: PropTypes.number.isRequired,
   addToComputerScore: PropTypes.func.isRequired,
-  playersTurn: PropTypes.bool.isRequired,
   changeWhosTurn: PropTypes.func.isRequired,
-  turnNumber: PropTypes.number.isRequired,
   updateTurnNumber: PropTypes.func.isRequired,
-  playerStarts: PropTypes.bool.isRequired,
   whoStartsNext: PropTypes.func.isRequired,
+  setTokens: PropTypes.func.isRequired,
+  changeBoxColors: PropTypes.func.isRequired,
+  updateTheBoard: PropTypes.func.isRequired,
+
+  /* properties */
+
+  infoDisplay: PropTypes.string.isRequired,
+  introScreen: PropTypes.bool.isRequired,
+  computerScore: PropTypes.number.isRequired,
+  playersTurn: PropTypes.bool.isRequired,
+  turnNumber: PropTypes.number.isRequired,
+  playerStarts: PropTypes.bool.isRequired,
   tokens: PropTypes.shape({
     playerToken: PropTypes.string.isRequired,
     computerToken: PropTypes.string.isRequired,
   }).isRequired,
-  setTokens: PropTypes.func.isRequired,
   boxColors: PropTypes.arrayOf(PropTypes.shape({
     backgroundColor: PropTypes.string.isRequired,
   }).isRequired).isRequired,
-  changeBoxColors: PropTypes.func.isRequired,
   gameBoard: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  updateTheBoard: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
@@ -258,16 +243,6 @@ function mapStateToProps ({
 }
 
 function mapDispatchToProps (dispatch) {
-  return bindActionCreators({
-    changeInfoDisplay,
-    showIntroScreen,
-    addToComputerScore,
-    changeWhosTurn,
-    updateTurnNumber,
-    whoStartsNext,
-    setTokens,
-    changeBoxColors,
-    updateTheBoard,
-  }, dispatch);
+  return bindActionCreators(Object.assign({}, actions), dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

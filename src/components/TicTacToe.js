@@ -14,6 +14,7 @@ import {
   addToComputerScore,
   changeWhosTurn,
   updateTurnNumber,
+  whoStartsNext,
 } from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
@@ -30,7 +31,7 @@ class TicTacToe extends Component {
       playerChose: '',
       computerChose: '',
       // playersTurn: true,
-      playerStarts: true,
+      // playerStarts: true,
       // turnNumber: 1,
       boxColors: [
         { backgroundColor: '#D2D2D2' },
@@ -115,13 +116,15 @@ class TicTacToe extends Component {
   }
 
   whoStarts () {
-    if (this.state.playerStarts) {
+    if (this.props.playerStarts) {
       this.props.changeWhosTurn(false);
-      this.setState({ playerStarts: false });
+      this.props.whoStartsNext();
+      // this.setState({ playerStarts: false });
       this.props.changeInfoDisplay(show.THINKING);
       setTimeout(this.ComputerMove, 1000);
     } else {
-      this.setState({ playerStarts: true });
+      this.props.whoStartsNext();
+      // this.setState({ playerStarts: true });
       this.props.changeWhosTurn(true);
       this.props.changeInfoDisplay(show.YOUR_TURN);
     }
@@ -235,12 +238,28 @@ TicTacToe.propTypes = {
   changeWhosTurn: PropTypes.func.isRequired,
   turnNumber: PropTypes.number.isRequired,
   updateTurnNumber: PropTypes.func.isRequired,
+  playerStarts: PropTypes.bool.isRequired,
+  whoStartsNext: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
 
-function mapStateToProps ({ infoDisplay, introScreen, computerScore, playersTurn, turnNumber }) {
-  return { infoDisplay, introScreen, computerScore, playersTurn, turnNumber };
+function mapStateToProps ({
+  infoDisplay,
+  introScreen,
+  computerScore,
+  playersTurn,
+  turnNumber,
+  playerStarts ,
+}) {
+  return {
+    infoDisplay,
+    introScreen,
+    computerScore,
+    playersTurn,
+    turnNumber,
+    playerStarts,
+  };
 }
 
 function mapDispatchToProps (dispatch) {
@@ -250,6 +269,7 @@ function mapDispatchToProps (dispatch) {
     addToComputerScore,
     changeWhosTurn,
     updateTurnNumber,
+    whoStartsNext,
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

@@ -23,3 +23,7 @@ export const updateTurnNumber = (newTurn) => ({
   type: types.TURN_NUMBER,
   payload: newTurn,
 });
+
+export const whoStartsNext = () => ({
+  type: types.FIRST_MOVE,
+});

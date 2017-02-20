@@ -52,3 +52,12 @@ describe('updateTurnNumber test', () => {
     expect(actions.updateTurnNumber(newTurn)).toEqual(expectedAction);
   });
 });
+
+describe('whoStartsNext text', () => {
+  it('sends out correct action type', () => {
+    const expectedAction = {
+      type: types.FIRST_MOVE,
+    };
+    expect(actions.whoStartsNext()).toEqual(expectedAction);
+  });
+});

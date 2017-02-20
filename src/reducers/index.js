@@ -6,6 +6,7 @@ import playersTurn from './playersTurn';
 import turnNumber from './turnNumber';
 import playerStarts from './playerStarts';
 import tokens from './tokens';
+import boxColors from './boxColors';
 
 const rootReducer = combineReducers({
   infoDisplay,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   turnNumber,
   playerStarts,
   tokens,
+  boxColors,
 });
 
 export default rootReducer;

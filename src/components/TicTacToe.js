@@ -16,6 +16,7 @@ import {
   updateTurnNumber,
   whoStartsNext,
   setTokens,
+  changeBoxColors,
 } from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
@@ -34,17 +35,17 @@ class TicTacToe extends Component {
       // playersTurn: true,
       // playerStarts: true,
       // turnNumber: 1,
-      boxColors: [
-        { backgroundColor: '#D2D2D2' },
-        { backgroundColor: '#D2D2D2' },
-        { backgroundColor: '#D2D2D2' },
-        { backgroundColor: '#D2D2D2' },
-        { backgroundColor: '#D2D2D2' },
-        { backgroundColor: '#D2D2D2' },
-        { backgroundColor: '#D2D2D2' },
-        { backgroundColor: '#D2D2D2' },
-        { backgroundColor: '#D2D2D2' },
-      ],
+      // boxColors: [
+      //   { backgroundColor: '#D2D2D2' },
+      //   { backgroundColor: '#D2D2D2' },
+      //   { backgroundColor: '#D2D2D2' },
+      //   { backgroundColor: '#D2D2D2' },
+      //   { backgroundColor: '#D2D2D2' },
+      //   { backgroundColor: '#D2D2D2' },
+      //   { backgroundColor: '#D2D2D2' },
+      //   { backgroundColor: '#D2D2D2' },
+      //   { backgroundColor: '#D2D2D2' },
+      // ],
     };
 
     this.PlayerHasChosen = this.PlayerHasChosen.bind(this);
@@ -59,8 +60,6 @@ class TicTacToe extends Component {
   PlayerHasChosen (playerToken, computerToken) {
     this.props.showIntroScreen(false);
     this.props.setTokens(playerToken, computerToken);
-    // this.setState({ playerChose: choice });
-    // this.setState({ computerChose: computerToken });
   }
 
   NewPlayerMove (position) {
@@ -132,23 +131,25 @@ class TicTacToe extends Component {
 
   crownWinner (winningToken, winIdxOne, winIdxTwo, winIdxThree) {
     let winningColor = '#EFD469';
-    let Colors = JSON.parse(JSON.stringify(this.state.boxColors));
+    let Colors = JSON.parse(JSON.stringify(this.props.boxColors));
     Colors[winIdxOne].backgroundColor = winningColor;
     Colors[winIdxTwo].backgroundColor = winningColor;
     Colors[winIdxThree].backgroundColor = winningColor;
-    this.setState({ boxColors: Colors });
+    this.props.changeBoxColors(Colors);
+    // this.setState({ boxColors: Colors });
     this.props.changeInfoDisplay(show.YOU_LOST);
     this.props.addToComputerScore();
     setTimeout(this.restartGame, 3000);
   }
 
   restartGame () {
-    let boardCopy = _.cloneDeep(this.state.boxColors);
+    let boardCopy = _.cloneDeep(this.props.boxColors);
     let freshBoard = boardCopy.map((eachColor) => {
       eachColor.backgroundColor = '#D2D2D2';
       return eachColor;
     });
-    this.setState({ boxColors: freshBoard });
+    this.props.changeBoxColors(freshBoard);
+    // this.setState({ boxColors: freshBoard });
     this.setState({ gameBoard: ['', '', '', '', '', '', '', '', ''] });
     this.props.updateTurnNumber(1);
     this.whoStarts();
@@ -217,7 +218,7 @@ class TicTacToe extends Component {
           playersTurn={this.props.playersTurn}
           nextMove={this.NewPlayerMove}
           squareContains={this.state.gameBoard}
-          boxColors={this.state.boxColors}
+          boxColors={this.props.boxColors}
         />
         <ScoreBoard
           compScore={this.props.computerScore}
@@ -245,6 +246,10 @@ TicTacToe.propTypes = {
     computerToken: PropTypes.string.isRequired,
   }).isRequired,
   setTokens: PropTypes.func.isRequired,
+  boxColors: PropTypes.arrayOf(PropTypes.shape({
+    backgroundColor: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
+  changeBoxColors: PropTypes.func.isRequired,
 };
 
 /* eslint-disable func-style */
@@ -257,6 +262,7 @@ function mapStateToProps ({
   turnNumber,
   playerStarts,
   tokens,
+  boxColors,
 }) {
   return {
     infoDisplay,
@@ -266,6 +272,7 @@ function mapStateToProps ({
     turnNumber,
     playerStarts,
     tokens,
+    boxColors,
   };
 }
 
@@ -278,6 +285,7 @@ function mapDispatchToProps (dispatch) {
     updateTurnNumber,
     whoStartsNext,
     setTokens,
+    changeBoxColors,
   }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);

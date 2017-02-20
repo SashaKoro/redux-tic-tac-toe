@@ -1,7 +1,6 @@
 import { TOKEN_PICK } from '../actions/actionTypes';
 
 const tokens = (state = { playerToken: '', computerToken: '' }, action) => {
-  console.log(action);
   switch (action.type) {
   case TOKEN_PICK:
     return {

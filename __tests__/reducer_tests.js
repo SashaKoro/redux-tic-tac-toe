@@ -8,6 +8,8 @@ import playersTurn from '../src/reducers/playersTurn';
 import turnNumber from '../src/reducers/turnNumber';
 import playerStarts from '../src/reducers/playerStarts';
 import tokens from '../src/reducers/tokens';
+import boxColors, { colorState } from '../src/reducers/boxColors';
+import { colorTestStub } from '../src/constants/colorTestStub';
 import * as show from '../src/constants/infoDisplayConstants';
 
 describe('infoDisplay Reducer', () => {
@@ -95,5 +97,17 @@ describe('tokens Reducer', () => {
       playerToken: 'O',
       computerToken: 'X',
     });
+  });
+});
+
+describe('boxColors Reducer', () => {
+  it('returns the initial state on default', () => {
+    expect(boxColors(undefined, {})).toEqual(colorState);
+  });
+  it('handles the COLOR_CHANGE action type and returns a new state', () => {
+    expect(boxColors(undefined, {
+      type: types.COLOR_CHANGE,
+      payload: colorTestStub,
+    })).toEqual(colorTestStub);
   });
 });

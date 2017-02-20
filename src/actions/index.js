@@ -32,3 +32,8 @@ export const setTokens = (playerToken, compToken) => ({
   type: types.TOKEN_PICK,
   payload: [playerToken, compToken],
 });
+
+export const changeBoxColors = (newColors)  => ({
+  type: types.COLOR_CHANGE,
+  payload: newColors,
+});

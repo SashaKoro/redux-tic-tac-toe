@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import * as types from '../src/actions/actionTypes';
 import * as actions from '../src/actions/index';
+import { colorTestStub } from '../src/constants/colorTestStub';
 
 describe('changeInfoDisplay test', () => {
   it('sends out correct action type and payload', () => {
@@ -70,5 +71,15 @@ describe('setTokens test', () => {
       payload: tokenArgs,
     };
     expect(actions.setTokens(...tokenArgs)).toEqual(expectedAction);
+  });
+});
+
+describe('changeBoxColors test', () => {
+  it('sends out correct action type', () => {
+    const expectedAction = {
+      type: types.COLOR_CHANGE,
+      payload: colorTestStub,
+    };
+    expect(actions.changeBoxColors(colorTestStub)).toEqual(expectedAction);
   });
 });

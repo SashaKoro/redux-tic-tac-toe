@@ -12,6 +12,7 @@ import { cleanBoard } from '../reducers/gameBoard';
 import * as actions from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
+/* eslint-disable no-named-as-default */
 
 export class TicTacToe extends Component {
   constructor (props) {

@@ -15,8 +15,6 @@ const rowLogic = (gameBoard, testToken, token) => {
   let tokenIndexes = indexer(gameBoard, testToken);
   let board = gameBoard.slice();
 
-  console.log(tokenIndexes);
-
   for (let j = 0; j < winningLines.length; j += 1) {
     let found = tokenIndexes.filter((eachIndex) => winningLines[j].includes(eachIndex));
     if (found.length === 2) {

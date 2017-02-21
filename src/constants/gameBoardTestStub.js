@@ -1,3 +1,11 @@
 export const gameBoardTest = ['', '', 'X', '', '', 'O', '', '', ''];
 export const gameBoardTest2 = ['O', 'X', 'O', '', '', '', 'X', '', 'O'];
 export const gameBoardTest3 = ['', '', '', 'X', 'X', 'O', '', '', ''];
+export const gameBoardTest4 = ['', 'X', '', 'X', 'O', '', '', '', ''];
+export const gameBoardTest5 = ['O', '', '', '', '', 'X', 'X', '', ''];
+export const gameBoardTest6 = ['O', '', '', 'X', '', '', '', 'O', ''];
+export const gameBoardTest7 = ['', '', 'O', 'O', 'X', '', '', '', ''];
+export const gameBoardTest8 = ['X', 'X', '', 'O', '', '', '', '', ''];
+export const gameBoardTest9 = ['O', '', '', 'O', 'X', 'X', '', '', ''];
+export const gameBoardTest10 = ['O', 'X', '', '', 'O', '', '', '', ''];
+export const gameBoardTest11 = ['', '', 'X', 'O', '', '', 'O', '', 'X'];

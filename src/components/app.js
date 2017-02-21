@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default */
+
 import React, { Component } from 'react';
 import TicTacToe from './TicTacToe';
 

@@ -12,8 +12,6 @@ import { cleanBoard } from '../reducers/gameBoard';
 import * as actions from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
-/* eslint-disable no-named-as-default */
-
 export class TicTacToe extends Component {
   constructor (props) {
     super(props);
@@ -40,18 +38,21 @@ export class TicTacToe extends Component {
   }
 
   checkIfWinner (Board) {
+    let gameOver = false;
     winningLines.forEach((winLine) => {
       let [winIdxOne, winIdxTwo, winIdxThree] = winLine;
       if (Board[winIdxOne] + Board[winIdxTwo] + Board[winIdxThree] === 'XXX' ||
           Board[winIdxOne] + Board[winIdxTwo] + Board[winIdxThree] === 'OOO') {
+        gameOver = true;
         return this.crownWinner(...winLine);
       }
     });
     if (Board.join('').length === 9) {
       return this.tieGame();
     }
-
-    return this.whosMove();
+    if (!gameOver) {
+      return this.whosMove();
+    }
   }
 
   tieGame () {

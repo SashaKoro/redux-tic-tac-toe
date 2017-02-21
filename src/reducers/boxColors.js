@@ -1,16 +1,5 @@
 import { COLOR_CHANGE } from '../actions/actionTypes';
-
-export const colorState =  [
-  { backgroundColor: '#D2D2D2' },
-  { backgroundColor: '#D2D2D2' },
-  { backgroundColor: '#D2D2D2' },
-  { backgroundColor: '#D2D2D2' },
-  { backgroundColor: '#D2D2D2' },
-  { backgroundColor: '#D2D2D2' },
-  { backgroundColor: '#D2D2D2' },
-  { backgroundColor: '#D2D2D2' },
-  { backgroundColor: '#D2D2D2' },
-];
+import { colorState } from '../constants/colorTestStub';
 
 const boxColors = (state = colorState, action) => {
   switch (action.type) {

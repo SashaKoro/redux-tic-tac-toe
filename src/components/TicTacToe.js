@@ -13,7 +13,7 @@ import * as actions from '../actions/index';
 import * as show from '../constants/infoDisplayConstants';
 
 
-class TicTacToe extends Component {
+export class TicTacToe extends Component {
   constructor (props) {
     super(props);
 
@@ -161,13 +161,14 @@ class TicTacToe extends Component {
     if (this.props.introScreen) {
       return (
         <IntroScreen
-          className="IntroScreen" chooseThis={this.playerHasChosen}
+          className="IntroScreen"
+          chooseThis={this.playerHasChosen}
         />
       );
     } else return (
       <div className="TicTacToe">
         <InfoDisplay
-         info={this.props.infoDisplay}
+          info={this.props.infoDisplay}
         />
         <GameBoard
           playersTurn={this.props.playersTurn}

@@ -61,101 +61,114 @@ export class TicTacToe extends Component {
   }
 
   whosMove () {
-    this.props.updateTurnNumber(this.props.turnNumber + 1);
-    if (this.props.playersTurn) {
-      this.props.changeInfoDisplay(show.THINKING);
-      this.props.changeWhosTurn(false);
+    const {
+      updateTurnNumber,
+      turnNumber,
+      playersTurn,
+      changeWhosTurn, 
+      changeInfoDisplay,
+    } = this.props;
+
+    updateTurnNumber(turnNumber + 1);
+    if (playersTurn) {
+      changeWhosTurn(false);
+      changeInfoDisplay(show.THINKING);
       setTimeout(this.computerMove, 1000);
     } else {
-      this.props.changeWhosTurn(true);
-      this.props.changeInfoDisplay(show.YOUR_TURN);
+      changeWhosTurn(true);
+      changeInfoDisplay(show.YOUR_TURN);
     }
   }
 
   whoStarts () {
-    if (this.props.playerStarts) {
-      this.props.changeWhosTurn(false);
-      this.props.whoStartsNext();
-      this.props.changeInfoDisplay(show.THINKING);
+    const { playerStarts, changeWhosTurn, whoStartsNext, changeInfoDisplay } = this.props;
+
+    if (playerStarts) {
+      changeWhosTurn(false);
+      whoStartsNext();
+      changeInfoDisplay(show.THINKING);
       setTimeout(this.computerMove, 1000);
     } else {
-      this.props.whoStartsNext();
-      this.props.changeWhosTurn(true);
-      this.props.changeInfoDisplay(show.YOUR_TURN);
+      changeWhosTurn(true);
+      whoStartsNext();
+      changeInfoDisplay(show.YOUR_TURN);
     }
   }
 
   crownWinner (winIdxOne, winIdxTwo, winIdxThree) {
-    let winningColor = '#EFD469';
-    let Colors = JSON.parse(JSON.stringify(this.props.boxColors));
+    const { boxColors, changeBoxColors, changeInfoDisplay, addToComputerScore } = this.props;
+
+    const winningColor = '#EFD469';
+    let Colors = JSON.parse(JSON.stringify(boxColors));
     Colors[winIdxOne].backgroundColor = winningColor;
     Colors[winIdxTwo].backgroundColor = winningColor;
     Colors[winIdxThree].backgroundColor = winningColor;
-    this.props.changeBoxColors(Colors);
-    this.props.changeInfoDisplay(show.YOU_LOST);
-    this.props.addToComputerScore();
+    changeBoxColors(Colors);
+    changeInfoDisplay(show.YOU_LOST);
+    addToComputerScore();
     setTimeout(this.restartGame, 3000);
   }
 
   restartGame () {
-    let boardCopy = _.cloneDeep(this.props.boxColors);
+    const { boxColors, changeBoxColors, updateTheBoard, updateTurnNumber } = this.props;
+    let boardCopy = _.cloneDeep(boxColors);
     let freshBoard = boardCopy.map((eachColor) => {
       eachColor.backgroundColor = '#D2D2D2';
       return eachColor;
     });
-    this.props.changeBoxColors(freshBoard);
-    this.props.updateTheBoard(cleanBoard);
-    this.props.updateTurnNumber(1);
+    changeBoxColors(freshBoard);
+    updateTheBoard(cleanBoard);
+    updateTurnNumber(1);
     this.whoStarts();
   }
 
   computerMove () {
-    let turnNumber = this.props.turnNumber;
+    const { turnNumber, updateTheBoard } = this.props;
+    const { playerToken, computerToken } = this.props.tokens;
     let gameBoard = this.props.gameBoard.slice();
-    let playerToken = this.props.tokens.playerToken;
-    let token = this.props.tokens.computerToken;
+
 
     if (turnNumber === 1) {
-      gameBoard[0] = token;
+      gameBoard[0] = computerToken;
     }
     if (turnNumber === 2) {
       if (gameBoard[4] === '') {
-        gameBoard[4] = token;
-      } else gameBoard[2] = token;
+        gameBoard[4] = computerToken;
+      } else gameBoard[2] = computerToken;
     }
 
     if (turnNumber === 3) {
       if (gameBoard[4] === '') {
-        gameBoard[4] = token;
-      } else gameBoard[8] = token;
+        gameBoard[4] = computerToken;
+      } else gameBoard[8] = computerToken;
     }
 
     if (turnNumber === 4) {
-      gameBoard = rowLogic(gameBoard, playerToken, token);
+      gameBoard = rowLogic(gameBoard, playerToken, computerToken);
 
       if (gameBoard.join('').length === 3) {
-        gameBoard = forkLogic(gameBoard, playerToken, token);
+        gameBoard = forkLogic(gameBoard, playerToken, computerToken);
       }
       if (gameBoard.join('').length === 3) {
         if (gameBoard[1] !== playerToken) {
-          gameBoard[1] = token;
-        } else gameBoard[3] = token;
+          gameBoard[1] = computerToken;
+        } else gameBoard[3] = computerToken;
       }
     }
     if (turnNumber > 4) {
-      gameBoard = rowLogic(gameBoard, token, token);
+      gameBoard = rowLogic(gameBoard, computerToken, computerToken);
 
       if (gameBoard.join('').length === turnNumber - 1) {
-        gameBoard = rowLogic(gameBoard, playerToken, token);
+        gameBoard = rowLogic(gameBoard, playerToken, computerToken);
       }
       if (gameBoard.join('').length === turnNumber - 1) {
         let i = 0;
         while (gameBoard[i] !== '') i += 1;
-        gameBoard[i] = token;
+        gameBoard[i] = computerToken;
       }
     }
 
-    this.props.updateTheBoard(gameBoard);
+    updateTheBoard(gameBoard);
     this.checkIfWinner(gameBoard);
   }
 

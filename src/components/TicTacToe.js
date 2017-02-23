@@ -31,9 +31,10 @@ export class TicTacToe extends Component {
   }
 
   newPlayerMove (position) {
-    let currentBoard = this.props.gameBoard.slice();
-    currentBoard[position] = this.props.tokens.playerToken;
-    this.props.updateTheBoard(currentBoard);
+    const { gameBoard, updateTheBoard, tokens: { playerToken } } = this.props;
+    let currentBoard = gameBoard.slice();
+    currentBoard[position] = playerToken;
+    updateTheBoard(currentBoard);
     this.checkIfWinner(currentBoard);
   }
 
@@ -65,7 +66,7 @@ export class TicTacToe extends Component {
       updateTurnNumber,
       turnNumber,
       playersTurn,
-      changeWhosTurn, 
+      changeWhosTurn,
       changeInfoDisplay,
     } = this.props;
 
@@ -123,8 +124,7 @@ export class TicTacToe extends Component {
   }
 
   computerMove () {
-    const { turnNumber, updateTheBoard } = this.props;
-    const { playerToken, computerToken } = this.props.tokens;
+    const { turnNumber, updateTheBoard, tokens: { playerToken, computerToken } } = this.props;
     let gameBoard = this.props.gameBoard.slice();
 
 
